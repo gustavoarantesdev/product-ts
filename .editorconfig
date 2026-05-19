@@ -1,0 +1,15 @@
+# Indica que este é o arquivo EditorConfig de nível superior.
+root = true
+
+# Regras que se aplicam a todos os arquivos.
+[*]
+charset = utf-8                  ; Define a codificação do arquivo como UTF-8
+indent_style = space             ; Usa espaços para indentação
+indent_size = 2                  ; Tamanho da indentação em 4 espaços
+end_of_line = lf                 ; Define o estilo de quebra de linha (Line Feed, padrão Unix/macOS)
+trim_trailing_whitespace = true  ; Remove espaços em branco no final da linha
+insert_final_newline = true      ; Garante uma linha nova no final do arquivo
+
+# Regras específicas para arquivos JavaScript e Python.
+[*.{js,py}]
+indent_size = 2 ; Nesses arquivos, a indentação é de 2 espaços
