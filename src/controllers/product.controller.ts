@@ -1,8 +1,17 @@
 import type { Request, Response } from "express";
-import type { Product } from "../types/product.js";
+import { listAllProducts } from "../services/product.service.js";
 
-export function getProducts(req: Request, res: Response) {
-  res.status(200).send("Todos os produtos");
+export async function getAllProducts(req: Request, res: Response) {
+  try {
+    const products = await listAllProducts();
+
+    return res.status(200).json(products);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Internal server error",
+    });
+  }
 }
 
 export function getProductById(req: Request, res: Response) {
