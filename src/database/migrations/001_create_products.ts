@@ -1,6 +1,6 @@
 import type { Database } from "sqlite";
 
-export async function up(db: Database) {
+export async function up(db: Database): Promise<void> {
   await db.exec(`
     CREATE TABLE IF NOT EXISTS products (
       id          INTEGER      PRIMARY KEY AUTOINCREMENT,
