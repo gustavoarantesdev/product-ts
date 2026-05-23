@@ -1,15 +1,17 @@
 import type { Request, Response } from "express";
-import { listAllProducts } from "../services/product.service.js";
+import * as productService from "../services/product.service.js";
 
-export async function getAllProducts(req: Request, res: Response) {
+export async function getAllProducts(
+  req: Request,
+  res: Response,
+): Promise<Response> {
   try {
-    const products = await listAllProducts();
+    const products = await productService.listAllProducts();
 
     return res.status(200).json(products);
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({
-      message: "Internal server error",
+  } catch (error: any) {
+    return res.status(400).json({
+      error: error.message,
     });
   }
 }
