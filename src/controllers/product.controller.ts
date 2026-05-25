@@ -43,7 +43,7 @@ export async function create(req: Request, res: Response): Promise<Response> {
 export async function update(req: Request, res: Response): Promise<Response> {
   const productId = idIsNumber(req.params.id);
 
-  if (!productId) {
+  if (productId == null) {
     return res.status(400).json({ error: "Invalid product id" });
   }
 
@@ -58,7 +58,7 @@ export async function update(req: Request, res: Response): Promise<Response> {
   }
 }
 
-export async function destroy(req: Request, res: Response) {
+export async function destroy(req: Request, res: Response): Promise<Response> {
   const productId = idIsNumber(req.params.id);
 
   if (productId == null) {
