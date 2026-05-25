@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
 import * as productService from "../services/product.service.js";
 import type { Product } from "../types/product.js";
+import { createProductSchema } from "../schemas/product.schema.js";
 
 export async function getAll(req: Request, res: Response): Promise<Response> {
   try {
@@ -29,10 +30,16 @@ export async function getById(req: Request, res: Response) {
 }
 
 export async function create(req: Request, res: Response): Promise<Response> {
-  const product: Product = req.body;
+  const dataParsed = createProductSchema.safeParse(req.body);
+
+  if (!dataParsed.success) {
+    return res.status(400).json({
+      error: dataParsed.error.issues,
+    });
+  }
 
   try {
-    await productService.create(product);
+    await productService.create(dataParsed.data);
 
     return res.status(201).json({ message: "Product created" });
   } catch (error: any) {
