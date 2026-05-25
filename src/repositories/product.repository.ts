@@ -1,4 +1,5 @@
 import getConnection from "../database/connection.js";
+import type { CreateProductDTO } from "../schemas/product.schema.js";
 import type { Product } from "../types/product.js";
 
 const db = await getConnection();
@@ -30,8 +31,8 @@ export async function getById(id: number): Promise<Product | null> {
   return row as Product | null;
 }
 
-export async function create(product: Product): Promise<void> {
-  const { name, description } = product;
+export async function create(data: CreateProductDTO): Promise<void> {
+  const { name, description } = data;
 
   const stmt = await db.prepare(`
     INSERT INTO products (

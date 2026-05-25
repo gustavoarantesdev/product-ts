@@ -1,4 +1,5 @@
 import * as productRepository from "../repositories/product.repository.js";
+import type { CreateProductDTO } from "../schemas/product.schema.js";
 import type { Product } from "../types/product.js";
 
 export async function getAll(): Promise<Product[]> {
@@ -15,8 +16,8 @@ export async function getById(id: number): Promise<Product> {
   return product;
 }
 
-export async function create(product: Product): Promise<void> {
-  return await productRepository.create(product);
+export async function create(data: CreateProductDTO): Promise<void> {
+  return await productRepository.create(data);
 }
 
 export async function update(product: Product): Promise<void> {
