@@ -9,4 +9,6 @@ productRoutes.get("/:id", productController.getById);
 
 productRoutes.post("/create", productController.create);
 
+productRoutes.put("/update/:id", productController.update);
+
 export default productRoutes;
