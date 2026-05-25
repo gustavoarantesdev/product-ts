@@ -1,7 +1,7 @@
 export interface Product {
-  id: Number;
-  name: String;
-  description: String;
-  status: Number;
-  updated_at: String;
+  id: number;
+  name: string;
+  description: string;
+  status: number;
+  updated_at: string;
 }
