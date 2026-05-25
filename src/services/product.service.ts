@@ -5,13 +5,11 @@ export async function getAll(): Promise<Product[] | null> {
   return await productRepository.getAll();
 }
 
-export async function getById(id: number): Promise<Product | string> {
+export async function getById(id: number): Promise<Product> {
   const product = await productRepository.getById(id);
 
-  console.log(product);
-
   if (!product) {
-    return "Product not found";
+    throw new Error("Product not found");
   }
 
   return product;
