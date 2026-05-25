@@ -24,3 +24,7 @@ export async function create(product: Product): Promise<void> {
 export async function update(product: Product): Promise<void> {
   return await productRepository.update(product);
 }
+
+export async function destroy(id: number): Promise<void> {
+  return await productRepository.destroy(id);
+}
