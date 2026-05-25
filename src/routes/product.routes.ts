@@ -11,4 +11,6 @@ productRoutes.post("/create", productController.create);
 
 productRoutes.put("/update/:id", productController.update);
 
+productRoutes.delete("/delete/:id", productController.destroy);
+
 export default productRoutes;
