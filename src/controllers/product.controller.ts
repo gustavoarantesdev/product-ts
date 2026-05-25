@@ -8,9 +8,7 @@ export async function getAll(req: Request, res: Response): Promise<Response> {
 
     return res.status(200).json(products);
   } catch (error: any) {
-    return res.status(400).json({
-      error: error.message,
-    });
+    return res.status(400).json({ error: error.message });
   }
 }
 
@@ -18,9 +16,7 @@ export async function getById(req: Request, res: Response) {
   const productId: number = Number(req.params.id);
 
   if (isNaN(productId)) {
-    return res.status(400).json({
-      error: "Invalid product id",
-    });
+    return res.status(400).json({ error: "Invalid product id" });
   }
 
   try {
@@ -28,9 +24,7 @@ export async function getById(req: Request, res: Response) {
 
     return res.status(200).json(product);
   } catch (error: any) {
-    return res.status(400).json({
-      error: error.message,
-    });
+    return res.status(400).json({ error: error.message });
   }
 }
 
@@ -46,10 +40,34 @@ export async function create(req: Request, res: Response): Promise<Response> {
   }
 }
 
-export function updateProduct(req: Request, res: Response) {
-  //
+export async function update(req: Request, res: Response): Promise<Response> {
+  const productId = idIsNumber(req.params.id);
+
+  if (!productId) {
+    return res.status(400).json({ error: "Invalid product id" });
+  }
+
+  const product: Product = req.body;
+
+  try {
+    await productService.update(product);
+
+    return res.status(200).json({ message: "Product updated" });
+  } catch (error: any) {
+    return res.status(400).json({ error: error.message });
+  }
 }
 
 export function deleteProduct(req: Request, res: Response) {
   //
+}
+
+function idIsNumber(id: any): Boolean {
+  const idConverted = Number(id);
+
+  if (isNaN(idConverted)) {
+    return false;
+  }
+
+  return true;
 }
