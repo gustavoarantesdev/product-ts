@@ -20,3 +20,7 @@ export async function getById(id: number): Promise<Product | string> {
 export async function create(product: Product): Promise<void> {
   return await productRepository.create(product);
 }
+
+export async function update(product: Product): Promise<void> {
+  return await productRepository.update(product);
+}
