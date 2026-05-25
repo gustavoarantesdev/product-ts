@@ -20,9 +20,17 @@ export async function create(product: Product): Promise<void> {
 }
 
 export async function update(product: Product): Promise<void> {
-  return await productRepository.update(product);
+  const changes = await productRepository.update(product);
+
+  if (!changes) {
+    throw new Error("Product not found");
+  }
 }
 
 export async function destroy(id: number): Promise<void> {
-  return await productRepository.destroy(id);
+  const changes = await productRepository.destroy(id);
+
+  if (!changes) {
+    throw new Error("Product not found");
+  }
 }

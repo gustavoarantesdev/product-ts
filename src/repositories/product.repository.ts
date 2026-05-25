@@ -33,12 +33,12 @@ export async function create(product: Product): Promise<void> {
   await stmt.finalize();
 }
 
-export async function update(product: Product): Promise<void> {
+export async function update(product: Product): Promise<number | undefined> {
   const stmt = await db.prepare(
     "UPDATE products SET name = ?, description = ?, status = ?, updated_at = ? WHERE id = ?",
   );
 
-  await stmt.run(
+  const result = await stmt.run(
     product.name,
     product.description,
     product.status,
@@ -47,12 +47,16 @@ export async function update(product: Product): Promise<void> {
   );
 
   await stmt.finalize();
+
+  return result.changes;
 }
 
-export async function destroy(id: number): Promise<void> {
+export async function destroy(id: number): Promise<number | undefined> {
   const stmt = await db.prepare("DELETE FROM products WHERE id = ?");
 
-  await stmt.run(id);
+  const result = await stmt.run(id);
 
   await stmt.finalize();
+
+  return result.changes;
 }
