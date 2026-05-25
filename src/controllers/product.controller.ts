@@ -49,6 +49,8 @@ export async function update(req: Request, res: Response): Promise<Response> {
 
   const product: Product = req.body;
 
+  product.id = productId;
+
   try {
     await productService.update(product);
 
