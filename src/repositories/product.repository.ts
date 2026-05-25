@@ -3,12 +3,12 @@ import type { Product } from "../types/product.js";
 
 const db = await getConnection();
 
-export async function getAll(): Promise<Product[] | null> {
+export async function getAll(): Promise<Product[]> {
   const rows = await db.all(`
     SELECT id, name, description, status FROM products
     `);
 
-  return rows as Product[] | null;
+  return rows as Product[];
 }
 
 export async function getById(id: number): Promise<Product | null> {

@@ -1,7 +1,7 @@
 import * as productRepository from "../repositories/product.repository.js";
 import type { Product } from "../types/product.js";
 
-export async function getAll(): Promise<Product[] | null> {
+export async function getAll(): Promise<Product[]> {
   return await productRepository.getAll();
 }
 
