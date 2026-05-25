@@ -5,14 +5,23 @@ const db = await getConnection();
 
 export async function getAll(): Promise<Product[]> {
   const rows = await db.all(`
-    SELECT id, name, description, status FROM products
-    `);
+    SELECT
+      id,
+      name,
+      description,
+      status
+    FROM products
+  `);
 
   return rows as Product[];
 }
 
 export async function getById(id: number): Promise<Product | null> {
-  const stmt = await db.prepare("SELECT * FROM products WHERE id = ?");
+  const stmt = await db.prepare(`
+    SELECT *
+    FROM products
+    WHERE id = ?
+  `);
 
   const row = await stmt.get(id);
 
@@ -24,9 +33,13 @@ export async function getById(id: number): Promise<Product | null> {
 export async function create(product: Product): Promise<void> {
   const { name, description } = product;
 
-  const stmt = await db.prepare(
-    "INSERT INTO products (name, description) VALUES (?, ?)",
-  );
+  const stmt = await db.prepare(`
+    INSERT INTO products (
+      name,
+      description
+    )
+    VALUES (?, ?)
+  `);
 
   await stmt.run([name, description]);
 
@@ -34,15 +47,20 @@ export async function create(product: Product): Promise<void> {
 }
 
 export async function update(product: Product): Promise<number | undefined> {
-  const stmt = await db.prepare(
-    "UPDATE products SET name = ?, description = ?, status = ?, updated_at = ? WHERE id = ?",
-  );
+  const stmt = await db.prepare(`
+    UPDATE products
+    SET
+      name = ?,
+      description = ?,
+      status = ?,
+      updated_at = CURRENT_TIMESTAMP
+    WHERE id = ?
+  `);
 
   const result = await stmt.run(
     product.name,
     product.description,
     product.status,
-    product.updated_at,
     product.id,
   );
 
@@ -52,7 +70,10 @@ export async function update(product: Product): Promise<number | undefined> {
 }
 
 export async function destroy(id: number): Promise<number | undefined> {
-  const stmt = await db.prepare("DELETE FROM products WHERE id = ?");
+  const stmt = await db.prepare(`
+    DELETE FROM products
+    WHERE id = ?
+  `);
 
   const result = await stmt.run(id);
 
