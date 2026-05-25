@@ -14,8 +14,16 @@ export async function getAll(req: Request, res: Response): Promise<Response> {
   }
 }
 
-export function getById(req: Request, res: Response) {
-  //
+export async function getById(req: Request, res: Response) {
+  const productId: number = Number(req.params.id);
+
+  try {
+    const product = await productService.getById(productId);
+
+    return res.status(200).json(product);
+  } catch (error: any) {
+    return res.status(400).json({ error: error.message });
+  }
 }
 
 export async function create(req: Request, res: Response): Promise<Response> {
