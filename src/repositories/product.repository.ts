@@ -48,3 +48,11 @@ export async function update(product: Product): Promise<void> {
 
   await stmt.finalize();
 }
+
+export async function destroy(id: number): Promise<void> {
+  const stmt = await db.prepare("DELETE FROM products WHERE id = ?");
+
+  await stmt.run(id);
+
+  await stmt.finalize();
+}
