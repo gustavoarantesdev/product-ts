@@ -22,7 +22,9 @@ export async function getById(req: Request, res: Response) {
 
     return res.status(200).json(product);
   } catch (error: any) {
-    return res.status(400).json({ error: error.message });
+    return res.status(400).json({
+      error: error.message,
+    });
   }
 }
 
