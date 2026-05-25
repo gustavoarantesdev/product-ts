@@ -1,4 +1,4 @@
-import { json, type Request, type Response } from "express";
+import type { Request, Response } from "express";
 import * as productService from "../services/product.service.js";
 import type { Product } from "../types/product.js";
 
@@ -16,6 +16,12 @@ export async function getAll(req: Request, res: Response): Promise<Response> {
 
 export async function getById(req: Request, res: Response) {
   const productId: number = Number(req.params.id);
+
+  if (isNaN(productId)) {
+    return res.status(400).json({
+      error: "Invalid product id",
+    });
+  }
 
   try {
     const product = await productService.getById(productId);
