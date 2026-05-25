@@ -32,3 +32,19 @@ export async function create(product: Product): Promise<void> {
 
   await stmt.finalize();
 }
+
+export async function update(product: Product): Promise<void> {
+  const stmt = await db.prepare(
+    "UPDATE products SET name = ?, description = ?, status = ?, updated_at = ? WHERE id = ?",
+  );
+
+  await stmt.run(
+    product.name,
+    product.description,
+    product.status,
+    product.updated_at,
+    product.id,
+  );
+
+  await stmt.finalize();
+}
