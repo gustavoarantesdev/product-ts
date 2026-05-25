@@ -58,16 +58,28 @@ export async function update(req: Request, res: Response): Promise<Response> {
   }
 }
 
-export function deleteProduct(req: Request, res: Response) {
-  //
+export async function destroy(req: Request, res: Response) {
+  const productId = idIsNumber(req.params.id);
+
+  if (productId == null) {
+    return res.status(400).json({ error: "Invalid product id" });
+  }
+
+  try {
+    await productService.destroy(productId);
+
+    return res.status(200).json({ message: "Product deleted" });
+  } catch (error: any) {
+    return res.status(400).json({ error: error.message });
+  }
 }
 
-function idIsNumber(id: any): Boolean {
+function idIsNumber(id: any): number | null {
   const idConverted = Number(id);
 
   if (isNaN(idConverted)) {
-    return false;
+    return null;
   }
 
-  return true;
+  return idConverted;
 }
