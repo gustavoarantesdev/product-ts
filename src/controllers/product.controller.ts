@@ -1,7 +1,10 @@
 import type { Request, Response } from "express";
 import * as productService from "../services/product.service.js";
 import type { Product } from "../types/product.js";
-import { createProductSchema } from "../schemas/product.schema.js";
+import {
+  createProductSchema,
+  updateProductSchema,
+} from "../schemas/product.schema.js";
 
 export async function getAll(req: Request, res: Response): Promise<Response> {
   try {
@@ -32,7 +35,7 @@ export async function getById(req: Request, res: Response) {
 export async function create(req: Request, res: Response): Promise<Response> {
   const dataParsed = createProductSchema.safeParse(req.body);
 
-  if (!dataParsed.success) {
+  if (dataParsed.error) {
     return res.status(400).json({
       error: dataParsed.error.issues,
     });
@@ -48,18 +51,22 @@ export async function create(req: Request, res: Response): Promise<Response> {
 }
 
 export async function update(req: Request, res: Response): Promise<Response> {
-  const productId = idIsNumber(req.params.id);
+  const id = idIsNumber(req.params.id);
 
-  if (productId == null) {
+  if (id === null) {
     return res.status(400).json({ error: "Invalid product id" });
   }
 
-  const product: Product = req.body;
+  const dataParsed = updateProductSchema.safeParse(req.body);
 
-  product.id = productId;
+  if (dataParsed.error) {
+    return res.status(400).json({
+      error: dataParsed.error.issues,
+    });
+  }
 
   try {
-    await productService.update(product);
+    await productService.update(id, dataParsed.data);
 
     return res.status(200).json({ message: "Product updated" });
   } catch (error: any) {
