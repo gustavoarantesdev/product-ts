@@ -8,25 +8,25 @@ import {
 
 export async function getAll(req: Request, res: Response): Promise<Response> {
   try {
-    const products = await productService.getAll();
+    const allData = await productService.getAll();
 
-    return res.status(200).json(products);
+    return res.status(200).json(allData);
   } catch (error: any) {
     return res.status(400).json({ error: error.message });
   }
 }
 
-export async function getById(req: Request, res: Response) {
-  const productId: number = Number(req.params.id);
+export async function getById(req: Request, res: Response): Promise<Response> {
+  const id = idIsNumber(req.params.id);
 
-  if (isNaN(productId)) {
+  if (id === null) {
     return res.status(400).json({ error: "Invalid product id" });
   }
 
   try {
-    const product = await productService.getById(productId);
+    const data = await productService.getById(id);
 
-    return res.status(200).json(product);
+    return res.status(200).json(data);
   } catch (error: any) {
     return res.status(400).json({ error: error.message });
   }
@@ -75,14 +75,14 @@ export async function update(req: Request, res: Response): Promise<Response> {
 }
 
 export async function destroy(req: Request, res: Response): Promise<Response> {
-  const productId = idIsNumber(req.params.id);
+  const id = idIsNumber(req.params.id);
 
-  if (productId == null) {
+  if (id === null) {
     return res.status(400).json({ error: "Invalid product id" });
   }
 
   try {
-    await productService.destroy(productId);
+    await productService.destroy(id);
 
     return res.status(200).json({ message: "Product deleted" });
   } catch (error: any) {
