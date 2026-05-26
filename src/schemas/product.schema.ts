@@ -21,7 +21,7 @@ export type CreateProductDTO = z.infer<typeof createProductSchema>;
 export const updateProductSchema = z.object({
   name: z.string().min(3),
   description: z.string(),
-  status: z.number().optional(),
+  status: z.number(),
 });
 
 export type UpdateProductDTO = z.infer<typeof updateProductSchema>;
