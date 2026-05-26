@@ -1,5 +1,8 @@
 import * as productRepository from "../repositories/product.repository.js";
-import type { CreateProductDTO } from "../schemas/product.schema.js";
+import type {
+  CreateProductDTO,
+  UpdateProductDTO,
+} from "../schemas/product.schema.js";
 import type { Product } from "../types/product.js";
 
 export async function getAll(): Promise<Product[]> {
@@ -20,8 +23,11 @@ export async function create(data: CreateProductDTO): Promise<void> {
   return await productRepository.create(data);
 }
 
-export async function update(product: Product): Promise<void> {
-  const changes = await productRepository.update(product);
+export async function update(
+  id: number,
+  data: UpdateProductDTO,
+): Promise<void> {
+  const changes = await productRepository.update(id, data);
 
   if (!changes) {
     throw new Error("Product not found");
