@@ -1,5 +1,8 @@
 import getConnection from "../database/connection.js";
-import type { CreateProductDTO } from "../schemas/product.schema.js";
+import type {
+  CreateProductDTO,
+  UpdateProductDTO,
+} from "../schemas/product.schema.js";
 import type { Product } from "../types/product.js";
 
 const db = await getConnection();
@@ -47,7 +50,10 @@ export async function create(data: CreateProductDTO): Promise<void> {
   await stmt.finalize();
 }
 
-export async function update(product: Product): Promise<number | undefined> {
+export async function update(
+  id: number,
+  data: UpdateProductDTO,
+): Promise<number | undefined> {
   const stmt = await db.prepare(`
     UPDATE products
     SET
@@ -59,10 +65,10 @@ export async function update(product: Product): Promise<number | undefined> {
   `);
 
   const result = await stmt.run(
-    product.name,
-    product.description,
-    product.status,
-    product.id,
+    data.name,
+    data.description,
+    data.status,
+    id,
   );
 
   await stmt.finalize();
