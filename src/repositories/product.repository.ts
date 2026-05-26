@@ -1,13 +1,13 @@
 import getConnection from "../database/connection.js";
 import type {
+  Product,
   CreateProductDTO,
   UpdateProductDTO,
 } from "../schemas/product.schema.js";
-import type { Product } from "../types/product.js";
 
 const db = await getConnection();
 
-export async function getAll(): Promise<Product[]> {
+export async function findAll(): Promise<Product[]> {
   const rows = await db.all(`
     SELECT
       id,
@@ -20,7 +20,7 @@ export async function getAll(): Promise<Product[]> {
   return rows as Product[];
 }
 
-export async function getById(id: number): Promise<Product | null> {
+export async function findById(id: number): Promise<Product | null> {
   const stmt = await db.prepare(`
     SELECT *
     FROM products
@@ -64,12 +64,7 @@ export async function update(
     WHERE id = ?
   `);
 
-  const result = await stmt.run(
-    data.name,
-    data.description,
-    data.status,
-    id,
-  );
+  const result = await stmt.run(data.name, data.description, data.status, id);
 
   await stmt.finalize();
 

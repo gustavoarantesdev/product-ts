@@ -1,16 +1,16 @@
 import * as productRepository from "../repositories/product.repository.js";
 import type {
+  Product,
   CreateProductDTO,
   UpdateProductDTO,
 } from "../schemas/product.schema.js";
-import type { Product } from "../types/product.js";
 
 export async function getAll(): Promise<Product[]> {
-  return await productRepository.getAll();
+  return await productRepository.findAll();
 }
 
 export async function getById(id: number): Promise<Product> {
-  const product = await productRepository.getById(id);
+  const product = await productRepository.findById(id);
 
   if (!product) {
     throw new Error("Product not found");
