@@ -1,35 +1,27 @@
 import type { Request, Response } from "express";
 import * as productService from "../services/product.service.js";
-import type { Product } from "../types/product.js";
 import {
   createProductSchema,
   updateProductSchema,
 } from "../schemas/product.schema.js";
+import AppError from "../utils/AppError.js";
 
-export async function getAll(req: Request, res: Response): Promise<Response> {
-  try {
-    const allData = await productService.getAll();
+export async function getAll(_: Request, res: Response): Promise<Response> {
+  const allData = await productService.getAll();
 
-    return res.status(200).json(allData);
-  } catch (error: any) {
-    return res.status(400).json({ error: error.message });
+  if (allData.length === 0) {
+    throw new AppError("Producs no found", 404);
   }
+
+  return res.status(200).json(allData);
 }
 
 export async function getById(req: Request, res: Response): Promise<Response> {
-  const id = idIsNumber(req.params.id);
+  const id = isValidId(req.params.id);
 
-  if (id === null) {
-    return res.status(400).json({ error: "Invalid product id" });
-  }
+  const data = await productService.getById(id);
 
-  try {
-    const data = await productService.getById(id);
-
-    return res.status(200).json(data);
-  } catch (error: any) {
-    return res.status(400).json({ error: error.message });
-  }
+  return res.status(200).json(data);
 }
 
 export async function create(req: Request, res: Response): Promise<Response> {
@@ -41,21 +33,13 @@ export async function create(req: Request, res: Response): Promise<Response> {
     });
   }
 
-  try {
-    await productService.create(dataParsed.data);
+  await productService.create(dataParsed.data);
 
-    return res.status(201).json({ message: "Product created" });
-  } catch (error: any) {
-    return res.status(400).json({ error: error.message });
-  }
+  return res.status(201).json({ message: "Product created" });
 }
 
 export async function update(req: Request, res: Response): Promise<Response> {
-  const id = idIsNumber(req.params.id);
-
-  if (id === null) {
-    return res.status(400).json({ error: "Invalid product id" });
-  }
+  const id = isValidId(req.params.id);
 
   const dataParsed = updateProductSchema.safeParse(req.body);
 
@@ -65,36 +49,24 @@ export async function update(req: Request, res: Response): Promise<Response> {
     });
   }
 
-  try {
-    await productService.update(id, dataParsed.data);
+  await productService.update(id, dataParsed.data);
 
-    return res.status(200).json({ message: "Product updated" });
-  } catch (error: any) {
-    return res.status(400).json({ error: error.message });
-  }
+  return res.status(200).json({ message: "Product updated" });
 }
 
 export async function destroy(req: Request, res: Response): Promise<Response> {
-  const id = idIsNumber(req.params.id);
+  const id = isValidId(req.params.id);
 
-  if (id === null) {
-    return res.status(400).json({ error: "Invalid product id" });
-  }
+  await productService.destroy(id);
 
-  try {
-    await productService.destroy(id);
-
-    return res.status(200).json({ message: "Product deleted" });
-  } catch (error: any) {
-    return res.status(400).json({ error: error.message });
-  }
+  return res.status(200).json({ message: "Product deleted" });
 }
 
-function idIsNumber(id: any): number | null {
+function isValidId(id: any): number {
   const idConverted = Number(id);
 
   if (isNaN(idConverted)) {
-    return null;
+    throw new AppError("Invalid product id", 400);
   }
 
   return idConverted;
